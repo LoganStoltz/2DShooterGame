@@ -15,6 +15,9 @@ public class PlayerControl : MonoBehaviour
 
 
     // Player Vars
+    [SerializeField] private string inputNameHorizontal;
+    [SerializeField] private string inputNameVertical;
+
     public float movSpeed;
     float speedX, speedY;
     Rigidbody2D rb;
@@ -30,8 +33,8 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        speedX = Input.GetAxisRaw("Horizontal") * movSpeed; 
-        speedY = Input.GetAxisRaw("Vertical") * movSpeed;
+        speedX = Input.GetAxisRaw(inputNameHorizontal) * movSpeed; 
+        speedY = Input.GetAxisRaw(inputNameVertical) * movSpeed;
         rb.velocity = new Vector2(speedX, speedY);
         mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
