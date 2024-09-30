@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+
+    public float damage;
+
     [Range(1, 10)]
     private float speed = 10f;
 
@@ -21,5 +24,14 @@ public class Bullet : MonoBehaviour
     private void FixedUpdate()
     {
         rb.velocity = transform.up * speed;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            other.GetComponent<PlayerStats>().TakeDamage(damage);
+            Destroy(gameObject);
+        }
     }
 }
