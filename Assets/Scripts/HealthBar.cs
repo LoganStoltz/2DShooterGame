@@ -16,4 +16,9 @@ public class HealthBar : MonoBehaviour
         healthSlider.maxValue = amount;
         SetSlider(amount);
     }
+
+    void Update()
+    {
+        transform.LookAt(Camera.main.transform);
+    }
 }
