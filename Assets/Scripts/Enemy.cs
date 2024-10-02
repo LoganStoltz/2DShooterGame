@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private float damage;
     public Transform target;
     public float speed = 3f;
 
@@ -49,8 +50,7 @@ public class Enemy : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            Destroy(other.gameObject);
-            target = null;
+            other.gameObject.GetComponent<PlayerStats>().TakeDamage(damage);
         }
         else if(other.gameObject.CompareTag("Bullet"))
         {

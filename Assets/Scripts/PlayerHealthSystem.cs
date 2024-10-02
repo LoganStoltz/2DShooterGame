@@ -41,5 +41,6 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         Debug.Log("You died!");
+        Destroy(gameObject);
     }
 }
