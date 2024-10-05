@@ -26,11 +26,10 @@ public class Bullet : MonoBehaviour
         rb.velocity = transform.up * speed;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (other.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("topCollider"))
         {
-            other.GetComponent<PlayerStats>().TakeDamage(damage);
             Destroy(gameObject);
         }
     }
