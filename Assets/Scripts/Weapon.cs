@@ -44,7 +44,7 @@ public class Weapon : MonoBehaviour
     {
         int reloadAmount = maxClipSize - currentClip; //how many bullets to refill clip
         reloadAmount = (currentAmmo - reloadAmount) >= 0 ? reloadAmount : currentAmmo; // if we do have enough ammo to refill then we return reloadAmount otherwise we return the currectAmmo.
-        currentAmmo += reloadAmount;
+        currentClip += reloadAmount;
         currentAmmo -= reloadAmount;
     }
 
