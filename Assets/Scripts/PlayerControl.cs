@@ -30,6 +30,6 @@ public class PlayerControl : MonoBehaviour
 
         float angle = Mathf.Atan2(mousePos.y - transform.position.y, mousePos.x - transform.position.x) * Mathf.Rad2Deg - 90f;
 
-        transform.localRotation = Quaternion.Euler(0,0, angle); 
+        transform.localRotation = Quaternion.Euler(0,0, angle);
     }
 }
