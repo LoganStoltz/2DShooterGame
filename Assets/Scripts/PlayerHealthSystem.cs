@@ -7,6 +7,8 @@ public class PlayerStats : MonoBehaviour
 
     private float currentHealth;
 
+    private int score;
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -42,5 +44,6 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log("You died!");
         Destroy(gameObject);
+        GameController.manager.GameOver();
     }
 }
