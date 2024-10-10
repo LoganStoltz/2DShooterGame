@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour{
+
     int waveCount = 1;
 
     [SerializeField] public float spawnRate = 1.0f;
@@ -22,12 +23,14 @@ public class WaveSpawner : MonoBehaviour{
 
     IEnumerator waveSpawner() {
         waveIsDone = false;
-
-        for (int i = 0; i < enemyCount; i++) {
-            int rand = Random.Range(0, enemyPreFabs.Length);
-            GameObject enemyClone = enemyPreFabs[rand];
-            Instantiate(enemyClone, new Vector3 (transform.position.x, transform.position.y, 0f), Quaternion.identity); // had to create a vecto to keep the enemies at the correct z level
-            yield return new WaitForSeconds(spawnRate);
+        if(!GameController.manager.GetPlayerDeathState())
+        {
+            for (int i = 0; i < enemyCount; i++) {
+                int rand = Random.Range(0, enemyPreFabs.Length);
+                GameObject enemyClone = enemyPreFabs[rand];
+                Instantiate(enemyClone, new Vector3 (transform.position.x, transform.position.y, 0f), Quaternion.identity); // had to create a vecto to keep the enemies at the correct z level
+                yield return new WaitForSeconds(spawnRate);
+            }
         }
 
         spawnRate -= 0.1f;
