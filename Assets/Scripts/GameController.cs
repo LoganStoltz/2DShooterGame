@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
-        GameOverScreen.Setup();    
+        //int score = playerKillCount;
+        //GameOverScreen.Setup(score);    
     }
 }

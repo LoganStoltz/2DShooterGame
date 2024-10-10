@@ -5,15 +5,15 @@ using UnityEngine;
 public class WaveSpawner : MonoBehaviour{
     int waveCount = 1;
 
-    public float spawnRate = 1.0f;
+    [SerializeField] public float spawnRate = 1.0f;
     public float timeBetweenWaves = 3.0f;
 
     public int enemyCount;
 
-    public GameObject enemy;
+    [SerializeField] private GameObject[] enemyPreFabs;
 
-    bool waveIsDone = true;
-
+    [SerializeField] bool waveIsDone = true;
+    
     void Update() {
         if (waveIsDone == true) {
             StartCoroutine(waveSpawner());
@@ -24,8 +24,9 @@ public class WaveSpawner : MonoBehaviour{
         waveIsDone = false;
 
         for (int i = 0; i < enemyCount; i++) {
-            GameObject enemyClone = Instantiate(enemy);
-
+            int rand = Random.Range(0, enemyPreFabs.Length);
+            GameObject enemyClone = enemyPreFabs[rand];
+            Instantiate(enemyClone, new Vector3 (transform.position.x, transform.position.y, 0f), Quaternion.identity); // had to create a vecto to keep the enemies at the correct z level
             yield return new WaitForSeconds(spawnRate);
         }
 

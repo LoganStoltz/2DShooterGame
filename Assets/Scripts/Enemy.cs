@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float damage;
     public Transform target;
     public float speed = 3f;
-    int playerKillCount = 0;
+    public int playerKillCount = 0;
 
     public float rotateSpeed = 0.0025f;
     private Rigidbody2D rb;
