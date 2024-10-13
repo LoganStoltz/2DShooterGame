@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform firingPoint;
     [Range(0.1f, 1f)]
     [SerializeField] private float fireRate = 0.5f;
+    private bool weapon2Active = false;
 
     private float fireTimer;
 
@@ -28,6 +29,12 @@ public class Weapon : MonoBehaviour
         {
             Reload();
             Debug.Log("Reloading");
+        }
+
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            ChangeWeapon();
+            weapon2Active = !weapon2Active;
         }
     }
 
@@ -55,5 +62,13 @@ public class Weapon : MonoBehaviour
         {
             currentAmmo = maxAmmoSize;
         }
+    }
+
+    public void ChangeWeapon()
+    {
+        if(weapon2Active)
+            fireRate += 0.5f;
+        else 
+            fireRate -= 0.5f;
     }
 }
