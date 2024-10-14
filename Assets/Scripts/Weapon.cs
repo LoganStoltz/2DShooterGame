@@ -8,8 +8,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform firingPoint;
     [Range(0.1f, 1f)]
-    [SerializeField] private float fireRate = 0.5f;
-    private bool weapon2Active = false;
+    private float fireRate = 0.5f;
 
     private float fireTimer;
 
@@ -31,10 +30,22 @@ public class Weapon : MonoBehaviour
             Debug.Log("Reloading");
         }
 
-        if(Input.GetKeyDown(KeyCode.Q))
+        if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            ChangeWeapon();
-            weapon2Active = !weapon2Active;
+            ChangeWeapon(1);
+            Debug.Log("1");
+        }
+
+        if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ChangeWeapon(2);
+            Debug.Log("2");
+        }
+
+        if(Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChangeWeapon(3);
+            Debug.Log("3");
         }
     }
 
@@ -64,11 +75,24 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public void ChangeWeapon()
+    public void ChangeWeapon(int weaponNum)
     {
-        if(weapon2Active)
-            fireRate += 0.5f;
-        else 
-            fireRate -= 0.5f;
+        if(weaponNum == 1)
+        {
+            fireRate = 0.5f;
+            Debug.Log(fireRate);
+        }
+
+        if(weaponNum == 2)
+        {
+            fireRate = 0.2f;
+            Debug.Log(fireRate);
+        }
+
+        if(weaponNum == 3)
+        {
+            fireRate = 0f;
+            Debug.Log(fireRate);
+        }
     }
 }
