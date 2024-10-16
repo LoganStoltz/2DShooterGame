@@ -177,5 +177,6 @@ MonoBehaviour:
   damage: 10
   target: {fileID: 0}
   speed: 3
-  playerKillCount: 0
   rotateSpeed: 0.25
+  dropItemPrefab: {fileID: 8467243585169010063, guid: 86d11aee87de15e4e8c880e7afc01178, type: 3}
+  dropChance: 0.1

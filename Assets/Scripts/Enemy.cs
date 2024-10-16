@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour
     public float rotateSpeed = 0.0025f;
     private Rigidbody2D rb;
 
+    public GameObject dropItemPrefab; // The item to be dropped
+    public float dropChance = 0.1f; // 10% chance
+
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
     }
@@ -56,7 +59,19 @@ public class Enemy : MonoBehaviour
         {
             Destroy(other.gameObject);
             Destroy(gameObject);
+            DropItem();
             GameController.manager.IncreaseScore(1);
+        }
+    }
+
+    private void DropItem()
+    {
+        float randomValue = Random.value;
+
+        if (randomValue <= dropChance)
+        {
+            Instantiate(dropItemPrefab, transform.position, Quaternion.identity);
+            Debug.Log("item dropped");
         }
     }
 }
