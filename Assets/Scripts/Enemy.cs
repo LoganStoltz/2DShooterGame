@@ -62,6 +62,10 @@ public class Enemy : MonoBehaviour
             DropItem();
             GameController.manager.IncreaseScore(1);
         }
+        else if(other.gameObject.CompareTag("EnemyBullet"))
+        {
+            Destroy(other.gameObject);
+        }
     }
 
     private void DropItem()

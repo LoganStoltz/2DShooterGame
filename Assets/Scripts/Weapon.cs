@@ -9,7 +9,6 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform firingPoint;
     [Range(0.1f, 1f)]
     private float fireRate = 0.5f;
-
     private float fireTimer;
 
     public int currentClip, maxClipSize = 10, currentAmmo, maxAmmoSize = 100;

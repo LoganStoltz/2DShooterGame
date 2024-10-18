@@ -11,7 +11,7 @@ public class ShootingEnemy : MonoBehaviour
     public Vector2 distanceFromTarget;
 
     [Range(0.1f, 1f)]
-    private float fireRate = 0.1f;
+    private float fireRate = 0.5f;
     private float fireTimer;
     [SerializeField] private Transform firingPoint;
     
@@ -59,7 +59,7 @@ public class ShootingEnemy : MonoBehaviour
         Vector2 targetDirection = target.position - transform.position;
         float angle = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg - 90f;
         Quaternion q = Quaternion.Euler(new Vector3(0, 0, angle));
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, q, rotateSpeed); // Will take time to rotate
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, q, rotateSpeed); 
     }
 
 
@@ -82,6 +82,10 @@ public class ShootingEnemy : MonoBehaviour
             DropItem();
             GameController.manager.IncreaseScore(1);
         }
+        else if(other.gameObject.CompareTag("EnemyBullet"))
+        {
+            Destroy(other.gameObject);
+        }
     }
 
     private void DropItem()
@@ -97,8 +101,10 @@ public class ShootingEnemy : MonoBehaviour
 
     private void ShootTarget()
     {
-        if(distanceFromTarget.x < 10000f && distanceFromTarget.y < 10000f)
+        if(distanceFromTarget.x < 10f && distanceFromTarget.y < 10f)
+        {
             Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
             Debug.Log("enemyShoting");
+        }
     }
 }
