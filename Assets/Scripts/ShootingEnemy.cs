@@ -28,21 +28,25 @@ public class ShootingEnemy : MonoBehaviour
     }
 
     private void Update() {
-        // Get the target
-        if (!target) {
-            GetTarget();
+    // If there's no target, find it
+    if (!target) {
+        GetTarget();
+    }
+    
+    // If the target is found
+    if (target) {
+        RotateTowardsTarget();
+        
+        // Fire the bullet if the fireTimer reaches 0 or less
+        fireTimer -= Time.deltaTime;
+        if (fireTimer <= 0) {
+            ShootTarget();
+            fireTimer = 1f / fireRate;  // Reset the timer based on the fire rate
+        }
 
-            if(fireTimer <= 0){
-                ShootTarget();
-                fireTimer = fireRate;
-            }
-        }
-        // Rotate towards the target
-        else {
-            RotateTowardsTarget();
-            fireTimer -= Time.deltaTime;
-        }
+        // Update distance from target
         distanceFromTarget = (target.position - enemy.transform.position);
+        }
     }
 
     private void FixedUpdate() 
@@ -93,7 +97,8 @@ public class ShootingEnemy : MonoBehaviour
 
     private void ShootTarget()
     {
-        if(distanceFromTarget.x < 10f && distanceFromTarget.y < 10000f)
+        if(distanceFromTarget.x < 10000f && distanceFromTarget.y < 10000f)
             Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
+            Debug.Log("enemyShoting");
     }
 }
