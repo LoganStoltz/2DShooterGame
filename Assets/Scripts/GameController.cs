@@ -8,13 +8,15 @@ public class GameController : MonoBehaviour
 {
     public static GameController manager;
     public GameObject GameOverScreen;
-    public TextMeshProUGUI pointsText, inGameScore;
+    public TextMeshProUGUI pointsText, inGameScore, inGameWaveNumber;
+    public WaveSpawner waveSpawner;  // Add reference to WaveSpawner
     public int score;
     public bool playerDead = false;
 
     public void Update()
     {
         inGameScore.text = score.ToString() + " POINTS";
+        inGameWaveNumber.text = "WAVE: " + waveSpawner.waveCount.ToString();  // Use waveSpawner.waveCount
     }
 
     private void Awake()

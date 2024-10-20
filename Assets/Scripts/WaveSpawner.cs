@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour{
 
-    int waveCount = 1;
+    public int waveCount = 0;
 
     [SerializeField] public float spawnRate = 1.0f;
-    public float timeBetweenWaves = 5.0f;
+    public float timeBetweenWaves = 10.0f;
     public int enemyCount;
     [SerializeField] private GameObject[] enemyPreFabs;
     [SerializeField] private GameObject shootingEnemyClone;
