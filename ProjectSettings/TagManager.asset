@@ -8,6 +8,7 @@ TagManager:
   - topCollider
   - Spawner
   - EnemyBullet
+  - Enemy
   layers:
   - Default
   - TransparentFX

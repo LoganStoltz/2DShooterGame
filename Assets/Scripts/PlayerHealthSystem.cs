@@ -50,5 +50,15 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("You died!");
         Destroy(gameObject);
         GameController.manager.GameOver();
+        DestroyAllEnemies();
+    }
+
+    private void DestroyAllEnemies()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            Destroy(enemy);
+        }
     }
 }
