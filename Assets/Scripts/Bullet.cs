@@ -39,5 +39,12 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
             Destroy(collision.gameObject);
         }
+
+        if(collision.gameObject.CompareTag("Deployable"))
+        {
+            Deployable deployable = collision.gameObject.GetComponent<Deployable>();
+            deployable.TakeDamage(1);
+            Destroy(gameObject);
+        }
     }
 }

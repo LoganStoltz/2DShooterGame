@@ -13,44 +13,62 @@ public class Weapon : MonoBehaviour
 
     public int currentClip, maxClipSize = 10, currentAmmo, maxAmmoSize = 100;
 
+    // Deployable Vars
+    [SerializeField] private GameObject deployablePrefab;
+    [SerializeField] private Transform deployPosition;
+    public int deployableAmmo = 10;
+    private bool isDeploying = false;
+
     private void Update()
     {
-        if(Input.GetMouseButton(0) && fireTimer <= 0f) {
+        if (isDeploying && Input.GetMouseButtonDown(0) && deployableAmmo > 0)
+        {
+            DeployObject();
+        }
+        else if (!isDeploying && Input.GetMouseButton(0) && fireTimer <= 0f)
+        {
             Shoot();
             fireTimer = fireRate;
         }
-        else {
+        else
+        {
             fireTimer -= Time.deltaTime;
         }
-        
-        if(Input.GetKeyDown(KeyCode.R))
+
+        if (Input.GetKeyDown(KeyCode.R))
         {
             Reload();
             Debug.Log("Reloading");
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             ChangeWeapon(1);
-            Debug.Log("1");
+            Debug.Log("Weapon 1 selected");
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ChangeWeapon(2);
-            Debug.Log("2");
+            Debug.Log("Weapon 2 selected");
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             ChangeWeapon(3);
-            Debug.Log("3");
+            Debug.Log("Weapon 3 selected");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            ChangeWeapon(4);
+            Debug.Log("Deployable selected");
         }
     }
 
     public void Shoot()
     {
-        if(currentClip > 0)
+        if (currentClip > 0)
         {
             Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
             currentClip--;
@@ -59,8 +77,8 @@ public class Weapon : MonoBehaviour
 
     public void Reload()
     {
-        int reloadAmount = maxClipSize - currentClip; //how many bullets to refill clip
-        reloadAmount = (currentAmmo - reloadAmount) >= 0 ? reloadAmount : currentAmmo; // if we do have enough ammo to refill then we return reloadAmount otherwise we return the currectAmmo.
+        int reloadAmount = maxClipSize - currentClip;
+        reloadAmount = (currentAmmo - reloadAmount) >= 0 ? reloadAmount : currentAmmo;
         currentClip += reloadAmount;
         currentAmmo -= reloadAmount;
     }
@@ -68,7 +86,7 @@ public class Weapon : MonoBehaviour
     public void AddAmmo(int ammoAmount)
     {
         currentAmmo += ammoAmount;
-        if(currentAmmo > maxAmmoSize)
+        if (currentAmmo > maxAmmoSize)
         {
             currentAmmo = maxAmmoSize;
         }
@@ -76,22 +94,42 @@ public class Weapon : MonoBehaviour
 
     public void ChangeWeapon(int weaponNum)
     {
-        if(weaponNum == 1)
+        if (weaponNum == 1)
         {
             fireRate = 0.5f;
+            isDeploying = false;
             Debug.Log(fireRate);
         }
-
-        if(weaponNum == 2)
+        else if (weaponNum == 2)
         {
             fireRate = 0.2f;
+            isDeploying = false;
             Debug.Log(fireRate);
         }
-
-        if(weaponNum == 3)
+        else if (weaponNum == 3)
         {
             fireRate = 0f;
+            isDeploying = false;
             Debug.Log(fireRate);
+        }
+        else if (weaponNum == 4)
+        {
+            isDeploying = true;
+            Debug.Log("Deployable Mode");
+        }
+    }
+
+    private void DeployObject()
+    {
+        if (deployableAmmo <= 0) return;
+
+        Instantiate(deployablePrefab, deployPosition.position, deployPosition.rotation);
+        deployableAmmo--;
+
+        if (deployableAmmo <= 0)
+        {
+            isDeploying = false;
+            Debug.Log("No deployable ammo left!");
         }
     }
 }

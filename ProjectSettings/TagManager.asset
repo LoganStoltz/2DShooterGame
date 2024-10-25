@@ -9,6 +9,7 @@ TagManager:
   - Spawner
   - EnemyBullet
   - Enemy
+  - Deployable
   layers:
   - Default
   - TransparentFX
