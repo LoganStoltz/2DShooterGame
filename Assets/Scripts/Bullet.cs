@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
 
+
     public float damage;
 
     [Range(1, 10)]
@@ -31,6 +32,12 @@ public class Bullet : MonoBehaviour
         if (collision.gameObject.CompareTag("topCollider"))
         {
             Destroy(gameObject);
+        }
+        
+        if (collision.gameObject.CompareTag("EnemyBullet"))
+        {
+            Destroy(gameObject);
+            Destroy(collision.gameObject);
         }
     }
 }
