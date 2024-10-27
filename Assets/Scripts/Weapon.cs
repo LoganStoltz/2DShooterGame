@@ -123,7 +123,22 @@ public class Weapon : MonoBehaviour
     {
         if (deployableAmmo <= 0) return;
 
-        Instantiate(deployablePrefab, deployPosition.position, deployPosition.rotation);
+        // Define grid size (e.g., 1 unit per tile)
+        float gridSize = 1.0f; 
+
+        // Calculate the position in front of the player
+        Vector3 forwardDirection = transform.up; // Assuming 'up' is forward in a top-down perspective
+        Vector3 targetPosition = deployPosition.position + forwardDirection * gridSize;
+
+        // Snap to nearest grid position
+        Vector3 snappedPosition = new Vector3(
+            Mathf.Round(targetPosition.x / gridSize) * gridSize,
+            Mathf.Round(targetPosition.y / gridSize) * gridSize,
+            targetPosition.z // Keep the z as it is for a 2D game
+        );
+
+        // Instantiate the deployable object at the snapped position
+        Instantiate(deployablePrefab, snappedPosition, Quaternion.identity);
         deployableAmmo--;
 
         if (deployableAmmo <= 0)
