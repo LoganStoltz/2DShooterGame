@@ -7,12 +7,8 @@ public class Bullet : MonoBehaviour
 
 
     public float damage;
-
-    [Range(1, 10)]
-    private float speed = 15f;
-
-    [Range(1, 10)]
-    private float lifeTime = 5f;
+    [SerializeField] private float speed = 15f;
+    [SerializeField] private float lifeTime = 5f;
 
     private Rigidbody2D rb;
 

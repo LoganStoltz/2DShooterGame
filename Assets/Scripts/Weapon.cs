@@ -6,6 +6,7 @@ public class Weapon : MonoBehaviour
 {
     // Gun Vars
     [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private GameObject RailgunBulletPrefab;
     [SerializeField] private Transform firingPoint;
     [Range(0.1f, 1f)]
     private float fireRate = 0.5f;
@@ -18,6 +19,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform deployPosition;
     public int deployableAmmo = 10;
     private bool isDeploying = false;
+    private bool Railgun = false;
 
     private void Update()
     {
@@ -64,13 +66,25 @@ public class Weapon : MonoBehaviour
             ChangeWeapon(4);
             Debug.Log("Deployable selected");
         }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            ChangeWeapon(5);
+            Debug.Log("Railgun selected");
+        }
     }
 
     public void Shoot()
     {
         if (currentClip > 0)
         {
-            Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
+            if(Railgun) 
+            {
+                Instantiate(RailgunBulletPrefab, firingPoint.position, firingPoint.rotation);
+            }
+            else
+            {
+                Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
+            }
             currentClip--;
         }
     }
@@ -98,24 +112,35 @@ public class Weapon : MonoBehaviour
         {
             fireRate = 0.5f;
             isDeploying = false;
+            Railgun = false;
             Debug.Log(fireRate);
         }
         else if (weaponNum == 2)
         {
             fireRate = 0.2f;
             isDeploying = false;
+            Railgun = false;
             Debug.Log(fireRate);
         }
         else if (weaponNum == 3)
         {
             fireRate = 0f;
             isDeploying = false;
+            Railgun = false;
             Debug.Log(fireRate);
         }
         else if (weaponNum == 4)
         {
             isDeploying = true;
+            Railgun = false;
             Debug.Log("Deployable Mode");
+        }
+        else if (weaponNum == 5)
+        {
+            fireRate = 0.5f;
+            isDeploying = false;
+            Railgun = true;
+            Debug.Log(fireRate);
         }
     }
 

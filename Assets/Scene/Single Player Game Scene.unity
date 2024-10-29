@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &219481445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,7 +552,7 @@ GameObject:
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &501046500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15713,7 +15713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1006249421740318811, guid: c0d7b508678e8714d91ec7720c0707e5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2500252481832071040, guid: c0d7b508678e8714d91ec7720c0707e5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15864,6 +15864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 9029783506867577852, guid: 64cbc2c7fa97cb741a9c85532ddcc42d, type: 3}
+  RailgunBulletPrefab: {fileID: 9029783506867577852, guid: 8121c51d688b969499e88f1dfa452f64, type: 3}
   firingPoint: {fileID: 1172297625507603734}
   currentClip: 20
   maxClipSize: 20
