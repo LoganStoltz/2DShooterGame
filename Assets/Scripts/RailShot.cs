@@ -4,20 +4,49 @@ using UnityEngine;
 
 public class RailShot : MonoBehaviour
 {
-    public int collisionCount = 0;
-    public int maxCollisions = 5; 
+    public Transform firingPoint;
+    public GameObject RailgunEffectPrefab;
+    public int maxCollisions = 5;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public void FireRailgun()
     {
-        if (other.CompareTag("Enemy") || other.CompareTag("EnemyBullet"))
+        if (firingPoint == null)
         {
-            collisionCount++;
-            Destroy(other.gameObject);
+            Debug.LogWarning("Firing point not set for RailShot!");
+            return;
+        }
 
-            if (collisionCount >= maxCollisions)
+        RaycastHit2D[] hits = Physics2D.RaycastAll(firingPoint.position, firingPoint.up, Mathf.Infinity);
+        int collisionCount = 0;
+
+        Vector3 endPosition = firingPoint.position + firingPoint.up * 100; // Default end point
+
+        foreach (var hit in hits)
+        {
+            if (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("EnemyBullet"))
             {
-                Destroy(gameObject);
+                Debug.Log("Enemy Hit");
+                Destroy(hit.collider.gameObject);
+                collisionCount++;
+
+                if (collisionCount >= maxCollisions)
+                {
+                    endPosition = hit.point;
+                    break;
+                }
             }
+        }
+
+        if (RailgunEffectPrefab)
+        {
+            var railgunEffect = Instantiate(RailgunEffectPrefab, firingPoint.position, firingPoint.rotation);
+            LineRenderer lineRenderer = railgunEffect.GetComponent<LineRenderer>();
+            if (lineRenderer)
+            {
+                lineRenderer.SetPosition(0, firingPoint.position);
+                lineRenderer.SetPosition(1, endPosition);
+            }
+            Destroy(railgunEffect, 0.1f); // Clean up the effect after a short delay
         }
     }
 }

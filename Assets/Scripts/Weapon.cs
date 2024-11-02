@@ -6,7 +6,6 @@ public class Weapon : MonoBehaviour
 {
     // Gun Vars
     [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private GameObject RailgunBulletPrefab;
     [SerializeField] private Transform firingPoint;
     [Range(0.1f, 1f)]
     private float fireRate = 0.5f;
@@ -20,6 +19,13 @@ public class Weapon : MonoBehaviour
     public int deployableAmmo = 10;
     private bool isDeploying = false;
     private bool Railgun = false;
+
+    private RailShot railShot;
+
+    private void Start()
+    {
+        railShot = GetComponent<RailShot>();
+    }
 
     private void Update()
     {
@@ -77,9 +83,9 @@ public class Weapon : MonoBehaviour
     {
         if (currentClip > 0)
         {
-            if(Railgun) 
+            if(Railgun)
             {
-                Instantiate(RailgunBulletPrefab, firingPoint.position, firingPoint.rotation);
+                railShot.FireRailgun();
             }
             else
             {
