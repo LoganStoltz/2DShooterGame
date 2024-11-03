@@ -15,10 +15,18 @@ public class Weapon : MonoBehaviour
 
     // Deployable Vars
     [SerializeField] private GameObject deployablePrefab;
-    [SerializeField] private Transform deployPosition;
     public int deployableAmmo = 10;
     private bool isDeploying = false;
     private bool Railgun = false;
+
+   // Grenade Vars
+    [SerializeField] private GameObject grenadePrefab;
+    [SerializeField] private float maxThrowForce = 15f;
+    [SerializeField] private float minThrowForce = 5f;
+    [SerializeField] private float maxHoldTime = 1.5f;
+    private float holdTime;
+    private bool isThrowingGrenade = false;
+    private bool grenadeSelected = false;
 
     private RailShot railShot;
 
@@ -29,11 +37,28 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
+        if (grenadeSelected && Input.GetMouseButtonDown(0)) // Start holding the grenade throw button
+        {
+            holdTime = 0f;
+            isThrowingGrenade = true;
+        }
+        else if (grenadeSelected && Input.GetMouseButtonDown(0) && isThrowingGrenade) // Increase hold time
+        {
+            holdTime += Time.deltaTime;
+            holdTime = Mathf.Clamp(holdTime, 0, maxHoldTime); // Clamp to maxHoldTime
+        }
+        else if (grenadeSelected && Input.GetMouseButtonDown(0) && isThrowingGrenade) // Release to throw
+        {
+            ThrowGrenade();
+            Debug.Log("throwing grenade");
+            isThrowingGrenade = false;
+        }
+
         if (isDeploying && Input.GetMouseButtonDown(0) && deployableAmmo > 0)
         {
             DeployObject();
         }
-        else if (!isDeploying && Input.GetMouseButton(0) && fireTimer <= 0f)
+        else if (!isDeploying && !grenadeSelected && Input.GetMouseButton(0) && fireTimer <= 0f)
         {
             Shoot();
             fireTimer = fireRate;
@@ -58,13 +83,13 @@ public class Weapon : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ChangeWeapon(2);
-            Debug.Log("Weapon 2 selected");
+            Debug.Log("Uzi selected");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             ChangeWeapon(3);
-            Debug.Log("Weapon 3 selected");
+            Debug.Log("Shotgun selected");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
@@ -76,6 +101,11 @@ public class Weapon : MonoBehaviour
         {
             ChangeWeapon(5);
             Debug.Log("Railgun selected");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            ChangeWeapon(6);
+            Debug.Log("Grenade selected");
         }
     }
 
@@ -119,6 +149,7 @@ public class Weapon : MonoBehaviour
             fireRate = 0.5f;
             isDeploying = false;
             Railgun = false;
+            grenadeSelected = false;
             Debug.Log(fireRate);
         }
         else if (weaponNum == 2)
@@ -126,6 +157,7 @@ public class Weapon : MonoBehaviour
             fireRate = 0.2f;
             isDeploying = false;
             Railgun = false;
+            grenadeSelected = false;
             Debug.Log(fireRate);
         }
         else if (weaponNum == 3)
@@ -133,12 +165,14 @@ public class Weapon : MonoBehaviour
             fireRate = 0f;
             isDeploying = false;
             Railgun = false;
+            grenadeSelected = false;
             Debug.Log(fireRate);
         }
         else if (weaponNum == 4)
         {
             isDeploying = true;
             Railgun = false;
+            grenadeSelected = false;
             Debug.Log("Deployable Mode");
         }
         else if (weaponNum == 5)
@@ -146,7 +180,15 @@ public class Weapon : MonoBehaviour
             fireRate = 0.5f;
             isDeploying = false;
             Railgun = true;
+            grenadeSelected = false;
             Debug.Log(fireRate);
+        }
+        else if (weaponNum == 6)
+        {
+            fireRate = 0.5f;
+            isDeploying = false;
+            Railgun = false;
+            grenadeSelected = true;
         }
     }
 
@@ -159,7 +201,7 @@ public class Weapon : MonoBehaviour
         Vector2 gridOffset = new Vector2(0.5f, 0.5f);
 
         Vector3 forwardDirection = transform.up; // 'up' is forward in my top-down perspective
-        Vector3 targetPosition = deployPosition.position + forwardDirection * gridSize;
+        Vector3 targetPosition = firingPoint.position + forwardDirection * gridSize;
 
         // Adjust the target position to account for grid offset
         targetPosition -= (Vector3)gridOffset;
@@ -184,4 +226,22 @@ public class Weapon : MonoBehaviour
             Debug.Log("No deployable ammo left!");
         }
     }
+
+    private void ThrowGrenade()
+    {
+        if (grenadePrefab == null) return;
+
+        // Calculate throw force based on hold time
+        float throwForce = Mathf.Lerp(minThrowForce, maxThrowForce, holdTime / maxHoldTime);
+
+        // Instantiate the grenade and apply force
+        GameObject grenade = Instantiate(grenadePrefab, firingPoint.position, Quaternion.identity);
+        Rigidbody2D rb = grenade.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            Vector2 throwDirection = (Vector2.up + (Vector2)transform.right).normalized; // Adjust for forward direction
+            rb.AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
+        }
+    }
+
 }
