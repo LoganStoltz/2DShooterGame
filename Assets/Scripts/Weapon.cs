@@ -37,28 +37,49 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if (grenadeSelected && Input.GetMouseButtonDown(0)) // Start holding the grenade throw button
+        HandleGrenadeThrowing();
+        HandleDeploying();
+        HandleShooting();
+        HandleReloading();
+        HandleWeaponSwitching();
+    }
+
+    private void HandleGrenadeThrowing()
+    {
+        if (!grenadeSelected) return;
+
+        if (Input.GetMouseButtonDown(0))
         {
-            holdTime = 0f;
-            isThrowingGrenade = true;
+            if (!isThrowingGrenade) // Start holding the grenade throw button
+            {
+                holdTime = 0f;
+                isThrowingGrenade = true;
+            }
+            else // Increase hold time
+            {
+                holdTime += Time.deltaTime;
+                holdTime = Mathf.Clamp(holdTime, 0, maxHoldTime); // Clamp to maxHoldTime
+            }
         }
-        else if (grenadeSelected && Input.GetMouseButtonDown(0) && isThrowingGrenade) // Increase hold time
-        {
-            holdTime += Time.deltaTime;
-            holdTime = Mathf.Clamp(holdTime, 0, maxHoldTime); // Clamp to maxHoldTime
-        }
-        else if (grenadeSelected && Input.GetMouseButtonDown(0) && isThrowingGrenade) // Release to throw
+        else if (isThrowingGrenade && Input.GetMouseButtonUp(0)) // Release to throw
         {
             ThrowGrenade();
-            Debug.Log("throwing grenade");
+            Debug.Log("Throwing grenade");
             isThrowingGrenade = false;
         }
+    }
 
+    private void HandleDeploying()
+    {
         if (isDeploying && Input.GetMouseButtonDown(0) && deployableAmmo > 0)
         {
             DeployObject();
         }
-        else if (!isDeploying && !grenadeSelected && Input.GetMouseButton(0) && fireTimer <= 0f)
+    }
+
+    private void HandleShooting()
+    {
+        if (!isDeploying && !grenadeSelected && Input.GetMouseButton(0) && fireTimer <= 0f)
         {
             Shoot();
             fireTimer = fireRate;
@@ -67,47 +88,51 @@ public class Weapon : MonoBehaviour
         {
             fireTimer -= Time.deltaTime;
         }
+    }
 
+    private void HandleReloading()
+    {
         if (Input.GetKeyDown(KeyCode.R))
         {
             Reload();
             Debug.Log("Reloading");
         }
+    }
 
+    private void HandleWeaponSwitching()
+    {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             ChangeWeapon(1);
             Debug.Log("Weapon 1 selected");
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ChangeWeapon(2);
             Debug.Log("Uzi selected");
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             ChangeWeapon(3);
             Debug.Log("Shotgun selected");
         }
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             ChangeWeapon(4);
             Debug.Log("Deployable selected");
         }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             ChangeWeapon(5);
             Debug.Log("Railgun selected");
         }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
+        else if (Input.GetKeyDown(KeyCode.Alpha6))
         {
             ChangeWeapon(6);
             Debug.Log("Grenade selected");
         }
     }
+
 
     public void Shoot()
     {
@@ -185,7 +210,7 @@ public class Weapon : MonoBehaviour
         }
         else if (weaponNum == 6)
         {
-            fireRate = 0.5f;
+            fireRate = 0.4f;
             isDeploying = false;
             Railgun = false;
             grenadeSelected = true;
@@ -239,7 +264,7 @@ public class Weapon : MonoBehaviour
         Rigidbody2D rb = grenade.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
-            Vector2 throwDirection = (Vector2.up + (Vector2)transform.right).normalized; // Adjust for forward direction
+            Vector2 throwDirection = (Vector2.up).normalized; // Adjust for forward direction
             rb.AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
         }
     }
