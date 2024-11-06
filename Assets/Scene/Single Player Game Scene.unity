@@ -16865,6 +16865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputNameHorizontal: Horizontal
   inputNameVertical: Vertical
+  m_Animator: {fileID: 0}
   movSpeed: 5
 --- !u!60 &9056372927128919223
 PolygonCollider2D:

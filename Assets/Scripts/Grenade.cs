@@ -9,7 +9,7 @@ public class Grenade : MonoBehaviour
     [SerializeField] private GameObject explosionEffect;  // Particle effect prefab for the explosion
     [SerializeField] private LayerMask damageLayer;       // Layer mask to identify objects that take damage
 
-    private bool hasExploded = false; // To prevent multiple explosions
+    private bool hasExploded = false;
 
     private void Start()
     {
@@ -19,7 +19,6 @@ public class Grenade : MonoBehaviour
 
     private IEnumerator ExplosionCountdown()
     {
-        // Wait for the delay duration
         yield return new WaitForSeconds(explosionDelay);
         Explode();
     }
@@ -45,10 +44,10 @@ public class Grenade : MonoBehaviour
                 Vector2 forceDirection = (rb.position - (Vector2)transform.position).normalized;
                 rb.AddForce(forceDirection * explosionForce);
             }
-
-            // Aplly damage here
+            // Apply damage if applicable
         }
-        Destroy(gameObject);
+
+        Destroy(gameObject); // Remove grenade object after explosion
     }
 
     private void OnDrawGizmosSelected()

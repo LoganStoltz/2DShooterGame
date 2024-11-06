@@ -21,9 +21,9 @@ public class Weapon : MonoBehaviour
 
    // Grenade Vars
     [SerializeField] private GameObject grenadePrefab;
-    [SerializeField] private float maxThrowForce = 15f;
-    [SerializeField] private float minThrowForce = 5f;
-    [SerializeField] private float maxHoldTime = 1.5f;
+    [SerializeField] private float maxThrowForce = 80f;
+    [SerializeField] private float minThrowForce = 20f;
+    [SerializeField] private float maxHoldTime = 3f;
     private float holdTime;
     private bool isThrowingGrenade = false;
     private bool grenadeSelected = false;
@@ -48,26 +48,29 @@ public class Weapon : MonoBehaviour
     {
         if (!grenadeSelected) return;
 
-        if (Input.GetMouseButtonDown(0))
+        // Start holding the grenade button
+        if (Input.GetMouseButtonDown(0) && !isThrowingGrenade)
         {
-            if (!isThrowingGrenade) // Start holding the grenade throw button
-            {
-                holdTime = 0f;
-                isThrowingGrenade = true;
-            }
-            else // Increase hold time
-            {
-                holdTime += Time.deltaTime;
-                holdTime = Mathf.Clamp(holdTime, 0, maxHoldTime); // Clamp to maxHoldTime
-            }
+            holdTime = 0f;
+            isThrowingGrenade = true;
         }
-        else if (isThrowingGrenade && Input.GetMouseButtonUp(0)) // Release to throw
+
+        // While holding the grenade button, increase hold time
+        if (isThrowingGrenade && Input.GetMouseButton(0))
+        {
+            holdTime += Time.deltaTime;
+            holdTime = Mathf.Clamp(holdTime, 0, maxHoldTime); // Clamp to maxHoldTime
+        }
+
+        // Release to throw the grenade with the calculated force
+        if (isThrowingGrenade && Input.GetMouseButtonUp(0))
         {
             ThrowGrenade();
             Debug.Log("Throwing grenade");
             isThrowingGrenade = false;
         }
     }
+
 
     private void HandleDeploying()
     {
@@ -259,14 +262,17 @@ public class Weapon : MonoBehaviour
         // Calculate throw force based on hold time
         float throwForce = Mathf.Lerp(minThrowForce, maxThrowForce, holdTime / maxHoldTime);
 
-        // Instantiate the grenade and apply force
+        // Instantiate the grenade at the firing point
         GameObject grenade = Instantiate(grenadePrefab, firingPoint.position, Quaternion.identity);
         Rigidbody2D rb = grenade.GetComponent<Rigidbody2D>();
+
         if (rb != null)
         {
-            Vector2 throwDirection = (Vector2.up).normalized; // Adjust for forward direction
+            // Determine throw direction based on mouse position relative to the player
+            Vector2 throwDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - firingPoint.position).normalized;
+            
+            // Apply force to the grenade in the throw direction
             rb.AddForce(throwDirection * throwForce, ForceMode2D.Impulse);
         }
     }
-
 }
